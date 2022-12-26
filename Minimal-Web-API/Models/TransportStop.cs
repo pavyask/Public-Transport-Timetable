@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
-using System.Text.Json.Serialization;
+﻿using Minimal_Web_API.Models;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Minimal_Web_API
 {
     public class TransportStop
     {
+        [Key]
         [JsonProperty("stopId")]
         public string StopId { get; set; }
 
@@ -16,5 +18,8 @@ namespace Minimal_Web_API
 
         [JsonProperty("zoneName")]
         public string ZoneName { get; set; }
+        
+        
+        public virtual ICollection<User> Users { get; set; }
     }
 }

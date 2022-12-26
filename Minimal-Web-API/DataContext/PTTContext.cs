@@ -9,10 +9,11 @@ namespace Minimal_Web_API.DataContext
             : base(options) { }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<TransportStop> TransportStops { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=PublicTransportTimetablesDB;Trusted_Connection=True;Encrypt=False");
+            optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=PTTDB;Trusted_Connection=True;Encrypt=False");
         }
     }
 }

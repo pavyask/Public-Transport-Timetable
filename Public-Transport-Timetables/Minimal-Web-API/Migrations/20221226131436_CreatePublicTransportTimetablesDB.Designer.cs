@@ -10,7 +10,7 @@ using Minimal_Web_API.DataContext;
 
 namespace MinimalWebAPI.Migrations
 {
-    [DbContext(typeof(PublicTransportTimetablesContext))]
+    [DbContext(typeof(PTTContext))]
     [Migration("20221226131436_CreatePublicTransportTimetablesDB")]
     partial class CreatePublicTransportTimetablesDB
     {

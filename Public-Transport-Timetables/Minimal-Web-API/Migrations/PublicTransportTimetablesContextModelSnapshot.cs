@@ -9,7 +9,7 @@ using Minimal_Web_API.DataContext;
 
 namespace MinimalWebAPI.Migrations
 {
-    [DbContext(typeof(PublicTransportTimetablesContext))]
+    [DbContext(typeof(PTTContext))]
     partial class PublicTransportTimetablesContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

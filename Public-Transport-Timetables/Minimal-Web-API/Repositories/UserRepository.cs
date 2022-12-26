@@ -6,9 +6,9 @@ namespace Minimal_Web_API.Repositories;
 
 public class UserRepository
 {
-    private readonly PublicTransportTimetablesContext _context;
+    private readonly PTTContext _context;
 
-    public UserRepository(PublicTransportTimetablesContext context)
+    public UserRepository(PTTContext context)
     {
         _context = context;
     }

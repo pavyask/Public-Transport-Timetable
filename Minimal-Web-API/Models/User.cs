@@ -9,6 +9,6 @@ namespace Minimal_Web_API.Models
 
         public string Password { get; set; }
 
-        public virtual ICollection<TransportStop> TransportStops { get; set; }
+        public virtual ICollection<TransportStop> TransportStops { get; set; } = new List<TransportStop>();
     }
 }

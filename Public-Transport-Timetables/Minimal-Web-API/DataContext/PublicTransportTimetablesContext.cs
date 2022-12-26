@@ -3,8 +3,11 @@ using Minimal_Web_API.Models;
 
 namespace Minimal_Web_API.DataContext
 {
-    public class PublicTransportTimetablesContext: DbContext
+    public class PublicTransportTimetablesContext : DbContext
     {
+        public PublicTransportTimetablesContext(DbContextOptions<PublicTransportTimetablesContext> options)
+            : base(options) { }
+
         public DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

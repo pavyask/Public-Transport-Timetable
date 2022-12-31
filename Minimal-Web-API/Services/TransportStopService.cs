@@ -1,4 +1,5 @@
-﻿using Minimal_Web_API.Repositories;
+﻿using Minimal_Web_API.Models;
+using Minimal_Web_API.Repositories;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
@@ -32,6 +33,18 @@ namespace Minimal_Web_API.Services
             return new List<TransportStop>();
         }
 
+        public async Task<StopTimetable> GetStopTimetableByStopId(string stopId)
+        {
+            RestResponse response = await GetResponseFromAPI(
+                $"http://ckan2.multimediagdansk.pl",
+                $"/delays?stopId={stopId}");
+
+            if (response.IsSuccessful)
+                return ConvertResponseToStopTimetable(response);
+
+            return new StopTimetable();
+        }
+
         private async Task<RestResponse> GetResponseFromAPI(string baseUrl, string resource)
         {
             var client = new RestClient(baseUrl);
@@ -53,11 +66,16 @@ namespace Minimal_Web_API.Services
             return stops;
         }
 
+        private static StopTimetable ConvertResponseToStopTimetable(RestResponse response)
+        {
+            var stopTimetableData = JObject.Parse(response.Content);
+            var stopTimetable = stopTimetableData.ToObject<StopTimetable>();
+            return stopTimetable;
+        }
+
         public async Task<IEnumerable<TransportStop>> GetTransportStopsOfUser(string login)
         {
             return await _transportStopRepository.GetTransportStopsOfUserAsync(login);
         }
-
-        public async Task<IEnumerable<>>
     }
 }

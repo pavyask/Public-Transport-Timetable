@@ -22,4 +22,7 @@ app.MapGet("/users/{login}/{password}", async (UserService userService, string l
 app.MapGet("/stops", async (TransportStopService pttService)
     => await pttService.GetTransportStops());
 
+app.MapGet("/stops/{stopId}/timetable", async (TransportStopService pttService, string stopId)
+    => await pttService.GetStopTimetableByStopId(stopId));
+
 app.Run();

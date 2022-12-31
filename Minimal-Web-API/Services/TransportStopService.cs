@@ -1,11 +1,19 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Minimal_Web_API.Repositories;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 
 namespace Minimal_Web_API.Services
 {
-    public class PTTService
+    public class TransportStopService
     {
         private readonly string filePath = $"{Environment.CurrentDirectory}/Resources/stops.json";
+
+        private readonly TransportStopRepository _transportStopRepository;
+
+        public TransportStopService(TransportStopRepository transportStopRepository)
+        {
+            _transportStopRepository = transportStopRepository;
+        }
 
         public async Task<IEnumerable<TransportStop>> GetTransportStops()
         {
@@ -16,8 +24,9 @@ namespace Minimal_Web_API.Services
             if (response.IsSuccessful)
             {
                 SaveResponseToFile(response);
-                var stops = ConvertResponseToStopsList(response);
-                return stops.Where(s => s.Name != null);
+                var stops = ConvertResponseToStopsList(response).Where(s => s.Name != null);
+                _transportStopRepository.AddTransportStops(stops);
+                return stops;
             }
 
             return new List<TransportStop>();
@@ -43,5 +52,12 @@ namespace Minimal_Web_API.Services
             var stops = stopsData[DateTime.Now.ToString("yyyy-MM-dd")]["stops"].ToObject<TransportStop[]>().ToList();
             return stops;
         }
+
+        public async Task<IEnumerable<TransportStop>> GetTransportStopsOfUser(string login)
+        {
+            return await _transportStopRepository.GetTransportStopsOfUserAsync(login);
+        }
+
+        public async Task<IEnumerable<>>
     }
 }

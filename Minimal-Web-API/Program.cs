@@ -5,7 +5,8 @@ using NuGet.Protocol.Plugins;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PTTContext>();
-builder.Services.AddTransient(typeof(PTTService));
+builder.Services.AddTransient(typeof(TransportStopService));
+builder.Services.AddTransient(typeof(TransportStopRepository));
 builder.Services.AddTransient(typeof(UserService));
 builder.Services.AddTransient(typeof(UserRepository));
 var app = builder.Build();
@@ -18,7 +19,7 @@ app.MapGet("/users", async (UserService userService)
 app.MapGet("/users/{login}/{password}", async (UserService userService, string login, string password)
     => await userService.GetUserByLoginAndPassword(login, password));
 
-app.MapGet("/stops", async (PTTService pttService)
+app.MapGet("/stops", async (TransportStopService pttService)
     => await pttService.GetTransportStops());
 
 app.Run();

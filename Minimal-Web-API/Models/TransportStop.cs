@@ -20,6 +20,14 @@ namespace Minimal_Web_API
         public string ZoneName { get; set; }
 
 
-        public virtual ICollection<User> Users { get; set; } = new List<User>();
+        public virtual IEnumerable<User> Users { get; set; } = new List<User>();
+
+
+        public void OverrideValues(TransportStop transportStop)
+        {
+            Name = transportStop.Name;
+            SubName = transportStop.SubName;
+            ZoneName = transportStop.ZoneName;
+        }
     }
 }

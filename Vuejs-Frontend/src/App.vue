@@ -8,23 +8,28 @@
   
   const props = ref({
     isLoggedIn: false,
-    username : "",
-    password: ""
+    user:{
+      login : "",
+      password: "",
+      savedStops:[]
+    }
   })
 
-  function login(username, password){
+  function login(user){
     props.value = {
       isLoggedIn: true,
-      username: username,
-      password: password
+      user: user
     };
   }
 
   function logout(){
     props.value = {
       isLoggedIn: false,
-      username: "",
-      password: ""
+      user:{
+        login : "",
+        password: "",
+        savedStops:[]
+      }
     }
   }
 </script>
@@ -36,8 +41,8 @@
   </header>
 
   <main>
-    <SavedStops v-bind="props" v-if="props.isLoggedIn"/>
-    <AllStops v-bind="props" />
+    <!-- <SavedStops v-bind="props" v-if="props.isLoggedIn"/> -->
+    <AllStops v-bind="props" v-if="props.isLoggedIn"/>
   </main>
 </template>
 

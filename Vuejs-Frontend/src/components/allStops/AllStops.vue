@@ -1,48 +1,50 @@
 <script setup>
   import axios from 'axios'
-  import { ref ,onBeforeMount} from 'vue'
+  import { ref, onBeforeMount, onMounted} from 'vue'
 
   const props = defineProps({
-    isLoggedIn: Boolean,
-    username: String,
-    password: String
-  })
+  isLoggedIn: Boolean,
+    user:{
+      login : String,
+      password: String,
+      savedStops: []
+    }
+})
 
   const stops = ref([]);
-
   const headers = ref([
-      { text: "Name", value: "name" },
-      { text: "Height (cm)", value: "height", sortable: true },
-      { text: "Weight (kg)", value: "weight", sortable: true },
-      { text: "Age", value: "age", sortable: true }
-    ]);
-
-    const items = ref([
-      { "name": "Curry", "height": 178, "weight": 77, "age": 20 },
-      { "name": "James", "height": 180, "weight": 75, "age": 21 },
-      { "name": "Jordan", "height": 181, "weight": 73, "age": 22 }
-    ]);
+    {text: "STOP ID", value: "stopId",sortable: true},
+    { text: "NAME", value: "name"},
+    { text: "SUB NAME", value: "subName"},
+    { text: "ZONE NAME", value: "zoneName"},
+  ]); 
+  const items = ref([]);
+  const itemsSelected = ref([ { "stopId": "8227", "name": "Dąbrowa Centrum", "subName": "04", "zoneName": "Gdynia", "users": [] } ]);
+  console.log(props.user.savedStops);
 
   onBeforeMount(() => {
     axios.get(`https://localhost:7107/stops`)
       .then(response=>{
-        console.log(response);
-        console.log(response.data);
 
         if(response.data==null){
           alert(`There is no data!`);
         }
         else{
           stops.value = response.data;
-          console.log(stops.value);
-          headers.value = Object.keys(stops.value[0]);
-          values.value = stops.value;
-        } 
+          stops.value.forEach(element => {
+            items.value.push(element)
+          });
+        }
       });
+  });
+
+  onMounted(() => {
+    axios.get(`https://localhost:7107/stops`)
   });
 </script>
 
 <template>
   <h1>All Stops</h1>
-  <EasyDataTable :headers="headers" :items="items"/>
+  <h1> Items Selected: {{itemsSelected}}</h1>
+  <EasyDataTable v-model:items-selected="itemsSelected" :headers="headers" :items="items"/>
 </template>

@@ -3,26 +3,32 @@ import { ref } from 'vue'
 import axios from 'axios'
 
 const props = defineProps({
-    isLoggedIn: Boolean,
-    username: String,
-    password: String
-  })
+  isLoggedIn: Boolean,
+  user:{
+    login : String,
+    password: String,
+    savedStops: []
+  }
+})
 const emits = defineEmits(['login','logout'])
 
-const usernameInput = ref(props.usernameInput)
-const passwordInput = ref(props.passwordInput)
+const loginInput = ref("")
+const passwordInput = ref("")
 
-function loginRequest(username,password){
-  axios.get(`https://localhost:7107/users/${username}/${password}`)
+function loginRequest(login,password){
+  axios.get(`https://localhost:7107/users/${login}/${password}`)
     .then(response=>{
       console.log(response.data);
       if(response.data==null){
-        alert(`User or password is incorrect!\nPlease try again.`);
-        usernameInput.value="";
+        alert(`Login or password is incorrect!\nPlease try again.`);
+        loginInput.value="";
         passwordInput.value="";
       }
-      else
-        emits(`login`,username,password);
+      else{
+        loginInput.value="";
+        passwordInput.value = "";
+        emits(`login`,response.data);
+      }
     });
 }
 
@@ -31,15 +37,15 @@ function loginRequest(username,password){
 <template>
   <template v-if="!isLoggedIn">
     <h1>Please log in, to use the app</h1>
-    <h1>Username: {{username}}, Password: {{password}}</h1>
-    <button  @click="loginRequest(usernameInput,passwordInput)">Login</button>
-    <input v-model="usernameInput" placeholder="Login...">
+    <h1>Login: {{user.login}}, Password: {{user.password}}</h1>
+    <button  @click="loginRequest(loginInput,passwordInput)">Login</button>
+    <input v-model="loginInput" placeholder="Login...">
     <input v-model="passwordInput" placeholder="Password...">
   </template>
 
   <template v-else="isLoggedIn">
-    <h1>Hello, {{ username }}</h1>
-    <h1>Username: {{username}}, Password: {{password}}</h1>
+    <h1>Hello, {{ user.login }}</h1>
+    <h1>Login: {{user.login}}, Password: {{user.password}}</h1>
     <button  @click="$emit('logout')">Logout</button>
   </template>
 </template>

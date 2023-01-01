@@ -8,6 +8,6 @@ namespace Minimal_Web_API.Models
         public DateTime LastUpdate { get; set; }
 
         [JsonProperty("delay")]
-        public IEnumerable<StopTimetableItem> StopTimetableItems { get; set; }
+        public ICollection<StopTimetableItem> StopTimetableItems { get; set; } = new List<StopTimetableItem>();
     }
 }

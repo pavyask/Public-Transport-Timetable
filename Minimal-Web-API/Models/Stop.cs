@@ -1,10 +1,11 @@
 ﻿using Minimal_Web_API.Models;
 using Newtonsoft.Json;
+
 using System.ComponentModel.DataAnnotations;
 
-namespace Minimal_Web_API
+namespace Minimal_Web_API.Models
 {
-    public class TransportStop
+    public class Stop
     {
         [Key]
         [JsonProperty("stopId")]
@@ -18,16 +19,15 @@ namespace Minimal_Web_API
 
         [JsonProperty("zoneName")]
         public string ZoneName { get; set; }
+        
+        public virtual ICollection<UserStop> UserStops { get; set; } = new List<UserStop>();
 
 
-        public virtual IEnumerable<User> Users { get; set; } = new List<User>();
-
-
-        public void OverrideValues(TransportStop transportStop)
+        public void OverrideValues(Stop stop)
         {
-            Name = transportStop.Name;
-            SubName = transportStop.SubName;
-            ZoneName = transportStop.ZoneName;
+            Name = stop.Name;
+            SubName = stop.SubName;
+            ZoneName = stop.ZoneName;
         }
     }
 }

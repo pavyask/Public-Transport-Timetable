@@ -5,13 +5,13 @@
 namespace MinimalWebAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class PTTDBinit : Migration
+    public partial class PTTDBManyToManyFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "TransportStops",
+                name: "Stops",
                 columns: table => new
                 {
                     StopId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -21,7 +21,7 @@ namespace MinimalWebAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TransportStops", x => x.StopId);
+                    table.PrimaryKey("PK_Stops", x => x.StopId);
                 });
 
             migrationBuilder.CreateTable(
@@ -37,43 +37,43 @@ namespace MinimalWebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TransportStopUser",
+                name: "UserStops",
                 columns: table => new
                 {
-                    TransportStopsStopId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UsersLogin = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserLogin = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StopId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TransportStopUser", x => new { x.TransportStopsStopId, x.UsersLogin });
+                    table.PrimaryKey("PK_UserStops", x => new { x.UserLogin, x.StopId });
                     table.ForeignKey(
-                        name: "FK_TransportStopUser_TransportStops_TransportStopsStopId",
-                        column: x => x.TransportStopsStopId,
-                        principalTable: "TransportStops",
+                        name: "FK_UserStops_Stops_StopId",
+                        column: x => x.StopId,
+                        principalTable: "Stops",
                         principalColumn: "StopId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TransportStopUser_Users_UsersLogin",
-                        column: x => x.UsersLogin,
+                        name: "FK_UserStops_Users_UserLogin",
+                        column: x => x.UserLogin,
                         principalTable: "Users",
                         principalColumn: "Login",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_TransportStopUser_UsersLogin",
-                table: "TransportStopUser",
-                column: "UsersLogin");
+                name: "IX_UserStops_StopId",
+                table: "UserStops",
+                column: "StopId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "TransportStopUser");
+                name: "UserStops");
 
             migrationBuilder.DropTable(
-                name: "TransportStops");
+                name: "Stops");
 
             migrationBuilder.DropTable(
                 name: "Users");

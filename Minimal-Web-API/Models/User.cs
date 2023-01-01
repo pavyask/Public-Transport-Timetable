@@ -9,6 +9,6 @@ namespace Minimal_Web_API.Models
 
         public string Password { get; set; }
 
-        public virtual IEnumerable<TransportStop> TransportStops { get; set; } = new List<TransportStop>();
+        public virtual ICollection<UserStop> UserStops { get; set; } = new List<UserStop>();
     }
 }

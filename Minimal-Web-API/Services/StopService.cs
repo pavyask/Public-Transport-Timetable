@@ -1,22 +1,26 @@
-﻿using Minimal_Web_API.Models;
+﻿using AutoMapper;
+using Minimal_Web_API.DTO;
+using Minimal_Web_API.Models;
 using Minimal_Web_API.Repositories;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
 namespace Minimal_Web_API.Services
 {
-    public class TransportStopService
+    public class StopService
     {
         private readonly string filePath = $"{Environment.CurrentDirectory}/Resources/stops.json";
 
-        private readonly TransportStopRepository _transportStopRepository;
+        private readonly StopRepository _stopRepository;
+        private readonly IMapper _mapper;
 
-        public TransportStopService(TransportStopRepository transportStopRepository)
+        public StopService(StopRepository stopRepository, IMapper mapper)
         {
-            _transportStopRepository = transportStopRepository;
+            _stopRepository = stopRepository;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<TransportStop>> GetTransportStops()
+        public async Task<IEnumerable<GetStopDTO>> GetStops()
         {
             RestResponse response = await GetResponseFromAPI(
                 $"https://ckan.multimediagdansk.pl",
@@ -26,11 +30,11 @@ namespace Minimal_Web_API.Services
             {
                 SaveResponseToFile(response);
                 var stops = ConvertResponseToStopsList(response).Where(s => s.Name != null);
-                _transportStopRepository.AddTransportStops(stops);
-                return stops;
+                _stopRepository.AddStops(stops);
+                return stops.Select(s => _mapper.Map<GetStopDTO>(s)).ToList(); ;
             }
 
-            return new List<TransportStop>();
+            return new List<GetStopDTO>();
         }
 
         public async Task<StopTimetable> GetStopTimetableByStopId(string stopId)
@@ -59,10 +63,10 @@ namespace Minimal_Web_API.Services
             File.WriteAllText(filePath, json);
         }
 
-        private static IEnumerable<TransportStop> ConvertResponseToStopsList(RestResponse response)
+        private static IEnumerable<Stop> ConvertResponseToStopsList(RestResponse response)
         {
             var stopsData = JObject.Parse(response.Content);
-            var stops = stopsData[DateTime.Now.ToString("yyyy-MM-dd")]["stops"].ToObject<TransportStop[]>().ToList();
+            var stops = stopsData[DateTime.Now.ToString("yyyy-MM-dd")]["stops"].ToObject<Stop[]>().ToList();
             return stops;
         }
 
@@ -71,11 +75,6 @@ namespace Minimal_Web_API.Services
             var stopTimetableData = JObject.Parse(response.Content);
             var stopTimetable = stopTimetableData.ToObject<StopTimetable>();
             return stopTimetable;
-        }
-
-        public async Task<IEnumerable<TransportStop>> GetTransportStopsOfUser(string login)
-        {
-            return await _transportStopRepository.GetTransportStopsOfUserAsync(login);
         }
     }
 }

@@ -35,7 +35,22 @@ namespace MinimalWebAPI.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Minimal_Web_API.TransportStop", b =>
+            modelBuilder.Entity("Minimal_Web_API.Models.UserStop", b =>
+                {
+                    b.Property<string>("UserLogin")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StopId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("UserLogin", "StopId");
+
+                    b.HasIndex("StopId");
+
+                    b.ToTable("UserStops");
+                });
+
+            modelBuilder.Entity("Minimal_Web_API.Stop", b =>
                 {
                     b.Property<string>("StopId")
                         .HasColumnType("nvarchar(450)");
@@ -54,37 +69,36 @@ namespace MinimalWebAPI.Migrations
 
                     b.HasKey("StopId");
 
-                    b.ToTable("TransportStops");
+                    b.ToTable("Stops");
                 });
 
-            modelBuilder.Entity("TransportStopUser", b =>
+            modelBuilder.Entity("Minimal_Web_API.Models.UserStop", b =>
                 {
-                    b.Property<string>("TransportStopsStopId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UsersLogin")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("TransportStopsStopId", "UsersLogin");
-
-                    b.HasIndex("UsersLogin");
-
-                    b.ToTable("TransportStopUser");
-                });
-
-            modelBuilder.Entity("TransportStopUser", b =>
-                {
-                    b.HasOne("Minimal_Web_API.TransportStop", null)
-                        .WithMany()
-                        .HasForeignKey("TransportStopsStopId")
+                    b.HasOne("Minimal_Web_API.Stop", "Stop")
+                        .WithMany("UserStops")
+                        .HasForeignKey("StopId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Minimal_Web_API.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersLogin")
+                    b.HasOne("Minimal_Web_API.Models.User", "User")
+                        .WithMany("UserStops")
+                        .HasForeignKey("UserLogin")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Stop");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Minimal_Web_API.Models.User", b =>
+                {
+                    b.Navigation("UserStops");
+                });
+
+            modelBuilder.Entity("Minimal_Web_API.Stop", b =>
+                {
+                    b.Navigation("UserStops");
                 });
 #pragma warning restore 612, 618
         }

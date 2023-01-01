@@ -17,9 +17,10 @@ namespace Minimal_Web_API.Services
             return await _userRepository.GetUsersAsync();
         }
 
-        public async Task<User> GetUserByLoginAndPassword(string login, string password)
+        public async Task<User?> GetUserByLoginAndPassword(string login, string password)
         {
-            return await _userRepository.GetUserByLoginAndPassword(login, password);
+            var user = await _userRepository.GetUserByLoginAndPassword(login, password);
+            return user;
         }
     }
 }

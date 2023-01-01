@@ -1,9 +1,11 @@
 <script setup>
   import {ref} from 'vue'
+
   import Login from './components/login/Login.vue'
   import SavedStops from './components/savedStops/SavedStops.vue'
   import AllStops from './components/allStops/AllStops.vue'
-
+  
+  
   const props = ref({
     isLoggedIn: false,
     username : "",
@@ -15,7 +17,7 @@
       isLoggedIn: true,
       username: username,
       password: password
-    }
+    };
   }
 
   function logout(){
@@ -34,7 +36,8 @@
   </header>
 
   <main>
-    <SavedStops v-if="props.isLoggedIn"/>
+    <SavedStops v-bind="props" v-if="props.isLoggedIn"/>
+    <AllStops v-bind="props" />
   </main>
 </template>
 

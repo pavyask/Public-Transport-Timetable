@@ -18,7 +18,7 @@ public class UserRepository
         return await _context.Users.ToListAsync();
     }
 
-    public async Task<User> GetUserByLoginAndPassword(string login, string password)
+    public async Task<User?> GetUserByLoginAndPassword(string login, string password)
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Login == login && u.Password == password);
     }

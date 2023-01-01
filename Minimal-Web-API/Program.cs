@@ -9,7 +9,16 @@ builder.Services.AddTransient(typeof(TransportStopService));
 builder.Services.AddTransient(typeof(TransportStopRepository));
 builder.Services.AddTransient(typeof(UserService));
 builder.Services.AddTransient(typeof(UserRepository));
+
+//builder.Services.AddCors();
+
 var app = builder.Build();
+
+//app.UseCors(x => x
+//               .AllowAnyMethod()
+//               .AllowAnyHeader()
+//               .SetIsOriginAllowed(origin => true) // allow any origin
+//               .AllowCredentials()); // allow credentials
 
 
 app.MapGet("/", () => "Hello World!");

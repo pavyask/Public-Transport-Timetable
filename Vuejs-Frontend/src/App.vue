@@ -1,18 +1,43 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+  import {ref} from 'vue'
+  import Login from './components/login/Login.vue'
+  import SavedStops from './components/savedStops/SavedStops.vue'
+  import AllStops from './components/allStops/AllStops.vue'
+
+  const props = ref({
+    isLoggedIn: false,
+    username : "",
+    password: ""
+  })
+
+  function login(username, password){
+    props.value = {
+      isLoggedIn: true,
+      username: username,
+      password: password
+    }
+  }
+
+  function logout(){
+    props.value = {
+      isLoggedIn: false,
+      username: "",
+      password: ""
+    }
+  }
 </script>
 
+
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+<header>
+    <Login v-bind="props" @logout="logout" @login="login"/>
+  </header>
+
+  <main>
+    <SavedStops v-if="props.isLoggedIn"/>
+  </main>
 </template>
+
 
 <style scoped>
 .logo {

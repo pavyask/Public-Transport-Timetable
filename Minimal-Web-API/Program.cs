@@ -1,4 +1,5 @@
 using Minimal_Web_API.DataContext;
+using Minimal_Web_API.DTO;
 using Minimal_Web_API.Repositories;
 using Minimal_Web_API.Services;
 using NuGet.Protocol.Plugins;
@@ -10,6 +11,7 @@ builder.Services.AddTransient(typeof(StopService));
 builder.Services.AddTransient(typeof(StopRepository));
 builder.Services.AddTransient(typeof(UserService));
 builder.Services.AddTransient(typeof(UserRepository));
+builder.Services.AddTransient(typeof(DataService));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddCors();
 
@@ -33,11 +35,16 @@ app.MapGet("/users/{login}/{password}", async (UserService userService, string l
 app.MapGet("/users/{login}/stops", async (UserService userService, string login)
     => await userService.GetUserStops(login));
 
-app.MapPost("/users/{login}/stops/{stopId}", (UserService userService, string login, string stopId)
-    => userService.SaveStopForUser(login, stopId));
+app.MapPost("/users/{login}/stops", (UserService userService, string login, ICollection<string> stopIds)
+    => userService.SaveStopsForUser(login, stopIds));
+
+app.MapGet("/users/{login}/stops/not-saved", async (UserService userService, string login)
+    => await userService.GetStopsExceptSavedByUser(login));
+
+
 
 app.MapGet("/stops", async (StopService pttService)
-    => await pttService.GetStops());
+    => await pttService.GetStopsFromAPI());
 
 app.MapGet("/stops/{stopId}/timetable", async (StopService pttService, string stopId)
     => await pttService.GetStopTimetableByStopId(stopId));

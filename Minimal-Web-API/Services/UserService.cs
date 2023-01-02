@@ -34,9 +34,18 @@ namespace Minimal_Web_API.Services
             return _mapper.Map<IEnumerable<GetStopDTO>>(stops);
         }
 
-        public void SaveStopForUser(string login, string stopId)
+        public async Task<IEnumerable<GetStopDTO>> GetStopsExceptSavedByUser(string login)
         {
-            _userRepository.SaveStopForUser(login, stopId);
+            var stops = await _userRepository.GetStopsExceptSavedByUser(login);
+            return _mapper.Map<IEnumerable<GetStopDTO>>(stops);
+        }
+        
+        public void SaveStopsForUser(string login, ICollection<string> stopIds)
+        {
+            foreach (var stopId in stopIds)
+            {
+                _userRepository.SaveStopForUser(login, stopId);
+            }
         }
     }
 }

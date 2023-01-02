@@ -9,26 +9,26 @@ namespace Minimal_Web_API.Services
 {
     public class StopService
     {
-        private readonly string filePath = $"{Environment.CurrentDirectory}/Resources/stops.json";
-
         private readonly StopRepository _stopRepository;
+        private readonly DataService _dataService;
         private readonly IMapper _mapper;
 
-        public StopService(StopRepository stopRepository, IMapper mapper)
+        public StopService(StopRepository stopRepository, DataService dataService, IMapper mapper)
         {
             _stopRepository = stopRepository;
+            _dataService = dataService;
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<GetStopDTO>> GetStops()
+        public async Task<IEnumerable<GetStopDTO>> GetStopsFromAPI()
         {
-            RestResponse response = await GetResponseFromAPI(
+            RestResponse response = await _dataService.GetResponseFromAPI(
                 $"https://ckan.multimediagdansk.pl",
                 $"/dataset/c24aa637-3619-4dc2-a171-a23eec8f2172/resource/4c4025f0-01bf-41f7-a39f-d156d201b82b/download/stops.json");
 
             if (response.IsSuccessful)
             {
-                SaveResponseToFile(response);
+                //_dataService.SaveResponseToFile(response);
                 var stops = ConvertResponseToStopsList(response).Where(s => s.Name != null);
                 _stopRepository.AddStops(stops);
                 return stops.Select(s => _mapper.Map<GetStopDTO>(s)).ToList(); ;
@@ -39,7 +39,7 @@ namespace Minimal_Web_API.Services
 
         public async Task<StopTimetable> GetStopTimetableByStopId(string stopId)
         {
-            RestResponse response = await GetResponseFromAPI(
+            RestResponse response = await _dataService.GetResponseFromAPI(
                 $"http://ckan2.multimediagdansk.pl",
                 $"/delays?stopId={stopId}");
 
@@ -47,20 +47,6 @@ namespace Minimal_Web_API.Services
                 return ConvertResponseToStopTimetable(response);
 
             return new StopTimetable();
-        }
-
-        private async Task<RestResponse> GetResponseFromAPI(string baseUrl, string resource)
-        {
-            var client = new RestClient(baseUrl);
-            var request = new RestRequest(resource, Method.Get);
-            var response = await client.ExecuteAsync(request);
-            return response;
-        }
-
-        private void SaveResponseToFile(RestResponse response)
-        {
-            var json = response.Content;
-            File.WriteAllText(filePath, json);
         }
 
         private static IEnumerable<Stop> ConvertResponseToStopsList(RestResponse response)

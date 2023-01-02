@@ -2,8 +2,8 @@
   import {ref} from 'vue'
 
   import Login from './components/login/Login.vue'
-  import SavedStops from './components/savedStops/SavedStops.vue'
-  import AllStops from './components/allStops/AllStops.vue'
+  import SavedStops from './components/stops/SavedStops.vue'
+  import AllNotSavedStops from './components/stops/AllNotSavedStops.vue'
   
   
   const props = ref({
@@ -11,15 +11,17 @@
     user:{
       login : "",
       password: "",
-      savedStops:[]
+      userStopIds:[]
     }
   })
 
   function login(user){
+    console.log(user)
     props.value = {
       isLoggedIn: true,
       user: user
     };
+    console.log(props.value)
   }
 
   function logout(){
@@ -28,7 +30,7 @@
       user:{
         login : "",
         password: "",
-        savedStops:[]
+        userStopIds:[]
       }
     }
   }
@@ -42,7 +44,7 @@
 
   <main>
     <!-- <SavedStops v-bind="props" v-if="props.isLoggedIn"/> -->
-    <AllStops v-bind="props" v-if="props.isLoggedIn"/>
+    <AllNotSavedStops v-bind="props" v-if="props.isLoggedIn"/>
   </main>
 </template>
 

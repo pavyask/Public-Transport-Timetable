@@ -3,15 +3,16 @@
   import { ref, onBeforeMount, onMounted} from 'vue'
 
   const props = defineProps({
-  isLoggedIn: Boolean,
-    user:{
-      login : String,
-      password: String,
-      savedStops: []
+    tableName: String,
+    requestString: String,
+    button:{
+        content: String,
+        actionName: String
     }
-})
+  })
 
   const stops = ref([]);
+
   const headers = ref([
     {text: "STOP ID", value: "stopId",sortable: true},
     { text: "NAME", value: "name"},
@@ -19,32 +20,33 @@
     { text: "ZONE NAME", value: "zoneName"},
   ]); 
   const items = ref([]);
-  const itemsSelected = ref([ { "stopId": "8227", "name": "Dąbrowa Centrum", "subName": "04", "zoneName": "Gdynia", "users": [] } ]);
-  console.log(props.user.savedStops);
+  const itemsSelected = ref([]);
 
   onBeforeMount(() => {
-    axios.get(`https://localhost:7107/stops`)
-      .then(response=>{
+    getStopsForTable(props.requestString)
+  });
 
+  function getStopsForTable(requestString){
+    axios.get(requestString)
+    .then(response=>{
         if(response.data==null){
-          alert(`There is no data!`);
+            alert(`There is no data!`);
         }
         else{
-          stops.value = response.data;
-          stops.value.forEach(element => {
-            items.value.push(element)
-          });
+            stops.value = response.data;
+            stops.value.forEach(element => {
+                items.value.push(element)
+            });
         }
       });
-  });
-
-  onMounted(() => {
-    axios.get(`https://localhost:7107/stops`)
-  });
+      console.log(props.button.actionName)
+  }
 </script>
 
 <template>
-  <h1>All Stops</h1>
+  <h1>{{ props.tableName }}</h1>
   <h1> Items Selected: {{itemsSelected}}</h1>
   <EasyDataTable v-model:items-selected="itemsSelected" :headers="headers" :items="items"/>
+
+  <button  @click="$emit(props.button.actionName,itemsSelected)">{{ props.button.content }}</button>
 </template>

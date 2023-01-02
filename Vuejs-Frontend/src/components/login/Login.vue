@@ -7,7 +7,7 @@ const props = defineProps({
   user:{
     login : String,
     password: String,
-    savedStops: []
+    userStopIds: []
   }
 })
 const emits = defineEmits(['login','logout'])

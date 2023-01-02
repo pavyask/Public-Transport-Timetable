@@ -14,10 +14,10 @@ namespace Minimal_Web_API
         public string HeadSign { get; set; }
 
         [JsonProperty("theoreticalTime")]
-        public DateTime TheoreticalTime { get; set; }
+        public string TheoreticalTime { get; set; }
 
         [JsonProperty("estimatedTime")]
-        public DateTime EstimatedTime { get; set; }
+        public string EstimatedTime { get; set; }
 
         [JsonProperty("delayInSeconds")]
         public int DelayInSeconds { get; set; }

@@ -1,50 +1,54 @@
 <script setup>
-  import {ref} from 'vue'
+import {ref} from 'vue'
 
-  import Login from './components/login/Login.vue'
-  import SavedStops from './components/stops/SavedStops.vue'
-  import AllNotSavedStops from './components/stops/AllNotSavedStops.vue'
+import Login from './components/login/Login.vue'
+import SavedStops from './components/stops/SavedStops.vue'
+import AddNotSavedStops from './components/stops/AddNotSavedStops.vue'
   
-  
-  const props = ref({
+const props = ref({
+  isLoggedIn: false,
+  user:{
+    login : "",
+    password: "",
+    userStopIds:[]
+  }
+})
+
+function login(user){
+  console.log(user)
+  props.value = {
+    isLoggedIn: true,
+    user: user
+  };
+  console.log(props.value)
+}
+
+function logout(){
+  props.value = {
     isLoggedIn: false,
     user:{
       login : "",
       password: "",
       userStopIds:[]
     }
-  })
-
-  function login(user){
-    console.log(user)
-    props.value = {
-      isLoggedIn: true,
-      user: user
-    };
-    console.log(props.value)
   }
+}
 
-  function logout(){
-    props.value = {
-      isLoggedIn: false,
-      user:{
-        login : "",
-        password: "",
-        userStopIds:[]
-      }
-    }
-  }
+function refresh(){
+  this.$forceUpdate();
+}
 </script>
 
 
 <template>
-<header>
+  <header>
+    <!-- <button @click="refresh">Refresh page</button> -->
     <Login v-bind="props" @logout="logout" @login="login"/>
   </header>
 
   <main>
-    <!-- <SavedStops v-bind="props" v-if="props.isLoggedIn"/> -->
-    <AllNotSavedStops v-bind="props" v-if="props.isLoggedIn"/>
+    <SavedStops v-bind="props" v-if="props.isLoggedIn"/>
+    <AddNotSavedStops v-bind="props" v-if="props.isLoggedIn"/>
   </main>
 </template>
 

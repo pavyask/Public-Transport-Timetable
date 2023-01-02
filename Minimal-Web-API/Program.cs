@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Minimal_Web_API.DataContext;
 using Minimal_Web_API.DTO;
 using Minimal_Web_API.Repositories;
@@ -38,10 +39,11 @@ app.MapGet("/users/{login}/stops", async (UserService userService, string login)
 app.MapPost("/users/{login}/stops", (UserService userService, string login, ICollection<string> stopIds)
     => userService.SaveStopsForUser(login, stopIds));
 
+app.MapDelete("/users/{login}/stops/{stopId}", (UserService userService, string login, string stopId)
+    => userService.RemoveSavedStopFromUser(login, stopId));
+
 app.MapGet("/users/{login}/stops/not-saved", async (UserService userService, string login)
     => await userService.GetStopsExceptSavedByUser(login));
-
-
 
 app.MapGet("/stops", async (StopService pttService)
     => await pttService.GetStopsFromAPI());

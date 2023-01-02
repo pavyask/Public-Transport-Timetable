@@ -57,4 +57,18 @@ public class UserRepository
             .Where(s => s.UserStops.All(us => us.UserLogin != login))
             .ToListAsync();
     }
+
+    internal void RemoveStopFromUser(string login, string stopId)
+    {
+        var user = _context.Users.Include(u => u.UserStops).FirstOrDefault(u => u.Login == login);
+        var stop = _context.Stops.FirstOrDefault(s => s.StopId == stopId);
+        
+        if (user == null || stop == null) return;
+
+        var userStop = user.UserStops.FirstOrDefault(us => us.StopId == stopId);
+        if (userStop == null) return;
+
+        _context.UserStops.Remove(userStop);
+        _context.SaveChanges();
+    }
 }

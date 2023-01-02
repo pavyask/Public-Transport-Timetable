@@ -47,5 +47,10 @@ namespace Minimal_Web_API.Services
                 _userRepository.SaveStopForUser(login, stopId);
             }
         }
+
+        public void RemoveSavedStopFromUser(string login, string stopId)
+        {
+            _userRepository.RemoveStopFromUser(login, stopId);
+        }
     }
 }

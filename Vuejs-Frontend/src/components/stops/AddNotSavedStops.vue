@@ -4,23 +4,10 @@ import { useStore } from 'vuex'
 import axios from 'axios'
 import StopsTable from './StopsTable.vue'
 
-// const props = defineProps({
-//   isLoggedIn: Boolean,
-//   user:{
-//     login : String,
-//     password: String,
-//     userStopIds: []
-//   }
-// })
 const store = useStore()
 
 const tableProps = ref({
-    // tableName: "Add not saved stops",
-    requestString: `https://localhost:7107/users/${store.getters.login}/stops/not-saved`,
-    // button:{
-    //     content: "Save stops",
-    //     actionName: saveStops.name
-    // }
+    requestString: `${store.state.baseUrl}/users/${store.getters.login}/stops/not-saved`,
 })
 
 
@@ -29,7 +16,7 @@ function saveStops(stops){
   console.log(stops);
   let stopIds = stops.map(s => s.stopId);
   console.log(stopIds);
-  axios.post(`https://localhost:7107/users/${store.getters.login}/stops`, stopIds)
+  axios.post(`${store.state.baseUrl}/users/${store.getters.login}/stops`, stopIds)
   location.reload()
 }
 </script>

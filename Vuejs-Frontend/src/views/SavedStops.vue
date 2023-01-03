@@ -13,7 +13,7 @@ onBeforeMount(() => {
 });
 
 function getSavedStops(){
-    axios.get(`https://localhost:7107/users/${store.getters.login}/stops`)
+    axios.get(`${store.state.baseUrl}/users/${store.getters.login}/stops`)
     .then(response=>{
         if(response.data==null){
             alert(`There is no data!`);
@@ -22,8 +22,8 @@ function getSavedStops(){
             savedStops.value = response.data;
             savedStops.value.forEach(stop => {
                 timetables.value.push({
-                    tableName: `${stop.name} ${stop.subName} [${stop.zoneName}]`,
-                    requestString: `https://localhost:7107/stops/${stop.stopId}/timetable`,
+                    tableName: `[${stop.stopId}] ${stop.name} ${stop.subName}, ${stop.zoneName}`,
+                    requestString: `${store.state.baseUrl}/stops/${stop.stopId}/timetable`,
                     stopId: stop.stopId
                 })
             });
@@ -34,7 +34,7 @@ function getSavedStops(){
 function removeStop(stopId){
   console.log("Removing works!")
   console.log(stopId);
-  axios.delete(`https://localhost:7107/users/${store.getters.login}/stops/${stopId}`)
+  axios.delete(`${store.state.baseUrl}/users/${store.getters.login}/stops/${stopId}`)
   location.reload()
 }
 </script>

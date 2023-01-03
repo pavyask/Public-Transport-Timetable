@@ -1,6 +1,9 @@
 <script setup>
 import axios from 'axios'
 import { ref, onBeforeMount} from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 const props = defineProps({
   tableName: String,
@@ -30,8 +33,6 @@ function getStopsForTable(requestString){
           alert(`There is no data!`);
       }
       else{
-        // console.log(response.data)
-        // console.log(response.data.lastUpdate)
         console.log(response.data.stopTimetableItems)
 
         lastUpdate.value = response.data.lastUpdate;

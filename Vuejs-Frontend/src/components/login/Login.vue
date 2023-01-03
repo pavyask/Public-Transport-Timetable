@@ -1,56 +1,28 @@
 <script setup>
 import { ref } from 'vue'
-import axios from 'axios'
-import { useStore } from 'vuex'
-import { useCookies } from "vue3-cookies";
-import { getCurrentInstance } from 'vue';
+import { useStore } from 'vuex';
 
-// const props = defineProps({
-//   isLoggedIn: Boolean,
-//   user:{
-//     login : String,
-//     password: String,
-//     userStopIds: []
-//   }
-// })
-// const emits = defineEmits(['login','logout'])
-const store = useStore()
+const store = useStore();
+const emits = defineEmits(['login'])
 const loginInput = ref("")
 const passwordInput = ref("")
-
-function loginRequest(login,password){
-  axios.get(`https://localhost:7107/users/${login}/${password}`)
-    .then(response=>{
-      console.log(response.data);
-      if(response.data==null){
-        alert(`Login or password is incorrect!\nPlease try again.`);
-      }
-      else{
-        console.log(response.data)
-        store.commit('login', response.data)  
-        // cookies.set('login',login)
-        // cookies.set('password',password)
-        // console.log(`Cookies login: ${cookies.get('login')}`)
-        // console.log(`Cookies password: ${cookies.get('password')}`)
-      }
-    });
-}
 </script>
 
-<template>
-<h1>isLoggedIn: {{ $store.getters.isLoggedIn }}</h1>
-<h1>login: {{ $store.getters.login }}</h1>
-<h1>password: {{ $store.getters.password }}</h1>
+<template v-if="!$store.getters.isLoggedIn">
+  <h1>Please log in, to use the app</h1>
+  <button @click="$emit('login', loginInput, passwordInput)">Login</button>
 
-  <template v-if="!$store.getters.isLoggedIn">
-    <h1>Please log in, to use the app</h1>
-    <button  @click="loginRequest(loginInput,passwordInput)">Login</button>
-    <input v-model="loginInput" placeholder="Login...">
-    <input v-model="passwordInput" placeholder="Password...">
-  </template>
-
-  <template v-else="$store.getters.isLoggedIn">
-    <h1>Hello, {{ $store.getters.login }}</h1>
-    <button @click="$store.commit('logout')">Logout</button>
-  </template>
+  <input v-model="loginInput" placeholder="Login..." 
+  :class="{wrongCredentials:$store.state.wrongCredentials}">
+  
+  <input v-model="passwordInput" placeholder="Password..." 
+  :class="{wrongCredentials:$store.state.wrongCredentials}">
 </template>
+
+
+<style scope>
+.wrongCredentials{
+  border: 2px solid red;
+  border-radius: 2px;
+}
+</style>

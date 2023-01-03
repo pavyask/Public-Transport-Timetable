@@ -1,37 +1,34 @@
 <script setup>
-import { ref } from 'vue'
+import Login from '../components/login/Login.vue'
+import Logout from '../components/login/Logout.vue'
 import axios from 'axios'
 import { useStore } from 'vuex'
 
+
 const store = useStore()
-const loginInput = ref("")
-const passwordInput = ref("")
 
 function loginRequest(login,password){
-  axios.get(`https://localhost:7107/users/${login}/${password}`)
+  axios.get(`${store.state.baseUrl}/users/${login}/${password}`)
     .then(response=>{
       console.log(response.data);
       if(response.data==null){
+        store.commit('setWrongCredentials',true)
         alert(`Login or password is incorrect!\nPlease try again.`);
       }
       else{
+        store.commit('setWrongCredentials',false)
         console.log(response.data)
-        store.commit('login', response.data)  
+        store.commit('login', response.data)
       }
     });
+}
+
+function logout(){
+  store.commit('logout')
 }
 </script>
 
 <template>
-  <div v-if="!$store.getters.isLoggedIn">
-    <h1>Please log in, to use the app</h1>
-    <button  @click="loginRequest(loginInput,passwordInput)">Login</button>
-    <input v-model="loginInput" placeholder="Login...">
-    <input v-model="passwordInput" placeholder="Password...">
-  </div>
-
-  <div v-else="$store.getters.isLoggedIn">
-    <h1>Hello, {{ $store.getters.login }}</h1>
-    <button @click="$store.commit('logout')">Logout</button>
-  </div>
+  <Login v-if="!$store.getters.isLoggedIn" @login="loginRequest"/>
+  <Logout v-else="$store.getters.isLoggedIn" @logout="logout"/>
 </template>

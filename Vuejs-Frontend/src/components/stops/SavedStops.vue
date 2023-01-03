@@ -4,14 +4,6 @@ import { useStore } from 'vuex'
 import axios from 'axios'
 import StopTimetable from './StopTimetable.vue'
 
-// const props = defineProps({
-// isLoggedIn: Boolean,
-// user:{
-//     login : String,
-//     password: String,
-//     userStopIds: []
-// }
-// })
 
 const store = useStore()
 const savedStops = ref([])
@@ -22,7 +14,7 @@ onBeforeMount(() => {
 });
 
 function getSavedStops(){
-    axios.get(`https://localhost:7107/users/${store.getters.login}/stops`)
+    axios.get(`${store.state.baseUrl}/users/${store.getters.login}/stops`)
     .then(response=>{
         if(response.data==null){
             alert(`There is no data!`);
@@ -32,7 +24,7 @@ function getSavedStops(){
             savedStops.value.forEach(stop => {
                 timetables.value.push({
                     tableName: `${stop.name} ${stop.subName} [${stop.zoneName}]`,
-                    requestString: `https://localhost:7107/stops/${stop.stopId}/timetable`,
+                    requestString: `${store.state.baseUrl}/stops/${stop.stopId}/timetable`,
                     stopId: stop.stopId
                 })
             });
@@ -43,7 +35,7 @@ function getSavedStops(){
 function removeStop(stopId){
   console.log("Removing works!")
   console.log(stopId);
-  axios.delete(`https://localhost:7107/users/${store.getters.login}/stops/${stopId}`)
+  axios.delete(`${store.state.baseUrl}/users/${store.getters.login}/stops/${stopId}`)
   location.reload()
 }
 </script>

@@ -1,14 +1,12 @@
 <script setup>
 import axios from 'axios'
 import { ref, onBeforeMount} from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 const props = defineProps({
-  // tableName: String,
   requestString: String,
-  // button:{
-  //     content: String,
-  //     actionName: String
-  // }
 })
 
 const emits = defineEmits(['saveStops'])
@@ -41,13 +39,11 @@ function getStopsForTable(requestString){
           });
       }
     });
-    // console.log(props.button.actionName)
 }
 </script>
 
 <template>
   <h1>Add not saved stops</h1>
-  <!-- <h1> Items Selected: {{itemsSelected}}</h1> -->
   <button @click="$emit('saveStops', itemsSelected)">Save stops</button>
   <EasyDataTable v-model:items-selected="itemsSelected" :headers="headers" :items="items"/>
 </template>

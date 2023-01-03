@@ -48,6 +48,6 @@ function getStopsForTable(requestString){
 <template>
   <h1>Add not saved stops</h1>
   <!-- <h1> Items Selected: {{itemsSelected}}</h1> -->
-  <EasyDataTable v-model:items-selected="itemsSelected" :headers="headers" :items="items"/>
   <button @click="$emit('saveStops', itemsSelected)">Save stops</button>
+  <EasyDataTable v-model:items-selected="itemsSelected" :headers="headers" :items="items"/>
 </template>

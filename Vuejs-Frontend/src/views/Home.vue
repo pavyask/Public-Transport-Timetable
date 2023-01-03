@@ -2,18 +2,7 @@
 import { ref } from 'vue'
 import axios from 'axios'
 import { useStore } from 'vuex'
-import { useCookies } from "vue3-cookies";
-import { getCurrentInstance } from 'vue';
 
-// const props = defineProps({
-//   isLoggedIn: Boolean,
-//   user:{
-//     login : String,
-//     password: String,
-//     userStopIds: []
-//   }
-// })
-// const emits = defineEmits(['login','logout'])
 const store = useStore()
 const loginInput = ref("")
 const passwordInput = ref("")
@@ -28,29 +17,21 @@ function loginRequest(login,password){
       else{
         console.log(response.data)
         store.commit('login', response.data)  
-        // cookies.set('login',login)
-        // cookies.set('password',password)
-        // console.log(`Cookies login: ${cookies.get('login')}`)
-        // console.log(`Cookies password: ${cookies.get('password')}`)
       }
     });
 }
 </script>
 
 <template>
-<h1>isLoggedIn: {{ $store.getters.isLoggedIn }}</h1>
-<h1>login: {{ $store.getters.login }}</h1>
-<h1>password: {{ $store.getters.password }}</h1>
-
-  <template v-if="!$store.getters.isLoggedIn">
+  <div v-if="!$store.getters.isLoggedIn">
     <h1>Please log in, to use the app</h1>
     <button  @click="loginRequest(loginInput,passwordInput)">Login</button>
     <input v-model="loginInput" placeholder="Login...">
     <input v-model="passwordInput" placeholder="Password...">
-  </template>
+  </div>
 
-  <template v-else="$store.getters.isLoggedIn">
+  <div v-else="$store.getters.isLoggedIn">
     <h1>Hello, {{ $store.getters.login }}</h1>
     <button @click="$store.commit('logout')">Logout</button>
-  </template>
+  </div>
 </template>

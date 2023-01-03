@@ -2,16 +2,7 @@
 import { ref, onBeforeMount} from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios'
-import StopTimetable from './StopTimetable.vue'
-
-// const props = defineProps({
-// isLoggedIn: Boolean,
-// user:{
-//     login : String,
-//     password: String,
-//     userStopIds: []
-// }
-// })
+import StopTimetable from '../components/stops/StopTimetable.vue'
 
 const store = useStore()
 const savedStops = ref([])

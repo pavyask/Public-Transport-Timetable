@@ -2,25 +2,11 @@
 import { ref} from 'vue'
 import { useStore } from 'vuex'
 import axios from 'axios'
-import StopsTable from './StopsTable.vue'
+import StopsTable from '../components/stops/StopsTable.vue'
 
-// const props = defineProps({
-//   isLoggedIn: Boolean,
-//   user:{
-//     login : String,
-//     password: String,
-//     userStopIds: []
-//   }
-// })
 const store = useStore()
-
 const tableProps = ref({
-    // tableName: "Add not saved stops",
     requestString: `https://localhost:7107/users/${store.getters.login}/stops/not-saved`,
-    // button:{
-    //     content: "Save stops",
-    //     actionName: saveStops.name
-    // }
 })
 
 
@@ -32,8 +18,18 @@ function saveStops(stops){
   axios.post(`https://localhost:7107/users/${store.getters.login}/stops`, stopIds)
   location.reload()
 }
+
+function updateAllStops(){
+  axios.get(`https://localhost:7107/stops`)
+  .then((response)=>{
+    location.reload()
+    alert("Stops data updated succesfully")
+  })
+}
 </script>
 
 <template>
+  <h1>Update stops data from ZTM API</h1>
+  <button @click="updateAllStops">Update all stops</button>
   <StopsTable v-bind="tableProps" @saveStops="saveStops"/>
 </template>

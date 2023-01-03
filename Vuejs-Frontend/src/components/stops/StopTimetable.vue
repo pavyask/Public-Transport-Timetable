@@ -51,7 +51,7 @@ function getStopsForTable(requestString){
 
 
 <template>
-  <h1>{{ props.tableName }} {{ lastUpdate }}</h1>
-  <EasyDataTable :headers="headers" :items="items"/>
+  <h1>{{ props.tableName }} | Last update: {{ lastUpdate }}</h1>
   <button @click="$emit('removeStop',props.stopId)">Remove stop</button>
+  <EasyDataTable :headers="headers" :items="items"/>
 </template>
